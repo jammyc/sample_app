@@ -12,7 +12,6 @@ def valid_sign_up(user)
   fill_in "Confirmation", with: user.password_confirmation
 end
 
-
 RSpec::Matchers.define :have_error_message do |message|
   match do |page|
     expect(page).to have_selector('div.alert.alert-error', text: message)
