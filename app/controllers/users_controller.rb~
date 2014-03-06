@@ -49,6 +49,7 @@ sign_in @user
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
     end
+
 def admin_user
       redirect_to(root_url) unless current_user.admin?
     end

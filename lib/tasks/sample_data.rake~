@@ -8,4 +8,4 @@ namespace :db do
                          admin: true)
     end
   end
-end
+
