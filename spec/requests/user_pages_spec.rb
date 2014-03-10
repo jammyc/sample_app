@@ -22,6 +22,14 @@ describe "microposts" do
     end
   end
 
+
+  describe "signup page" do
+    before { visit signup_path }
+
+    it { should have_content('Sign up') }
+    it { should have_title(full_title('Sign up')) }
+  end
+
   describe "signup" do
 
     before { visit signup_path }
@@ -38,6 +46,11 @@ describe "after submission" do
 
        it { should have_title('Sign up') }
         it { should have_content('error') }
+        it { should have_content('Name can\'t be blank') }
+       it { should have_content('Email can\'t be blank') }
+        it { should have_content('Email is invalid') }
+       it { should have_content('Password can\'t be blank') }
+       it { should have_content('Password is too short (minimum is 6 characters)') }
       end
     end
 
@@ -98,6 +111,17 @@ it { should have_title(new_name) }
 
       it { should have_content('error') }
     end
+describe "forbidden attributes" do
+      let(:params) do
+        { user: { admin: true, password: user.password,
+                  password_confirmation: user.password } }
+      end
+      before do
+        sign_in user, no_capybara: true
+        patch user_path(user), params
+      end
+      specify { expect(user.reload).not_to be_admin }
+    end
   end
 #edit ends
 describe "index" do
@@ -146,6 +170,27 @@ end
   #admin user ends
   end
 #index ends
+describe "delete links" do
+
+      it { should_not have_link('delete') }
+
+      describe "as an admin user" do
+        let(:admin) { FactoryGirl.create(:admin) }
+        before do
+          sign_in admin
+          visit users_path
+        end
+
+        it { should have_link('delete', href: user_path(User.first)) }
+        it "should be able to delete another user" do
+          expect do
+            click_link('delete', match: :first)
+          end.to change(User, :count).by(-1)
+        end
+        it { should_not have_link('delete', href: user_path(admin)) }
+      end
+    end
+  #delete ends
 
 end
 #user pages end
