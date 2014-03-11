@@ -61,6 +61,7 @@ def admin_user
     if signed_in?
         redirect_to root_path, notice: "Already logged in"
     end
+end
 
     def correct_user
       @user = User.find(params[:id])
