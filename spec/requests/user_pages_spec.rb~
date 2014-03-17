@@ -121,6 +121,7 @@ describe "follow/unfollow buttons" do
           it { should have_xpath("//input[@value='Follow']") }
         end
       end
+end
 #follow ends      
 end
 #profile page ends
